@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+
+    <script src="scripts/label.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/viewport.js"></script>
+
+    <script src="scripts/states/state_handler.js"></script>
+    <script src="scripts/states/tools/module_tool.js"></script>
+    <script src="scripts/states/tools/wiring_tool.js"></script>
+
+    <script src="scripts/chip/chip_core.js"></script>
+    <script src="scripts/chip/chip_factory.js"></script>
+    <script src="scripts/chip/evaluation.js"></script>
+    <script src="scripts/chip/general_chip.js"></script>
+    <script src="scripts/chip/io/input_chip.js"></script>
+    <script src="scripts/chip/io/const_chip.js"></script>
+    <script src="scripts/chip/io/output_chip.js"></script>
+    <script src="scripts/chip/io/display.js"></script>
+
+    <script src="scripts/circuit/circuit.js"></script>
+
+    <script src="scripts/wire/wire.js"></script>
+    <script src="scripts/wire/wire_point/wire_point.js"></script>
+    <script src="scripts/wire/wire_point/non_pin.js"></script>
+    <script src="scripts/wire/wire_point/pin.js"></script>
+
+    <script>
+        function addModuleToList(data) {
+            let moduleAnchor = document.createElement("a");
+
+            moduleAnchor.href = "";
+            moduleAnchor.textContent = data.name;
+            moduleAnchor.onclick = function (event) {
+                event.preventDefault();
+                mainCircuit.addCustomChip(data);
+            };
+
+            document.getElementById('custom_chip_dropdown').appendChild(moduleAnchor);
+        }
+
+        $(document).ready(function () {
+            window.onclick = function (event) {
+                if (!event.target.matches('.dropdown_button')) {
+                    for (const openDropdown of document.getElementsByClassName("dropdown-content")) {
+                        if (openDropdown.classList.contains('show')) openDropdown.classList.remove('show');
+                    }
+                }
+            }
+
+            const fileInput = document.getElementById('custom_chip_upload');
+
+            fileInput.onchange = () => {
+                for (const file of fileInput.files) {
+                    let reader = new FileReader();
+                    reader.onload = function (event) {
+                        let data = JSON.parse(event.target.result);
+                        addModuleToList(data);
+                    };
+
+                    reader.readAsText(file);
+                }
+            }
+
+            let sliderX = document.getElementById('slider_module_x');
+            sliderX.addEventListener('input', function () {
+                ModuleTool.changeChipSizeX(sliderX.value);
+            });
+
+            let sliderY = document.getElementById('slider_module_y');
+            sliderY.addEventListener('input', function () {
+                ModuleTool.changeChipSizeY(sliderY.value);
+            });
+        });
+    </script>
+
+    <title>Logic Circuit Simulator</title>
+
+</head>
+
+<body style="margin: 0; padding: 0; overflow: hidden" class="unselectable">
+    <div id="DEFAULT" style="display: none;">
+        <div style="position: absolute; width: 130px; height: 100%; background-color: rgb(230, 230, 230);">
+            <div style="position: absolute; left: 20px; top: 20px;">
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.AND)"><img draggable="false" class="gate_img" src="assets/AND.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.OR)"><img draggable="false" class="gate_img" src="assets/OR.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.XOR)"><img draggable="false" class="gate_img" src="assets/XOR.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.NAND)"><img draggable="false" class="gate_img" src="assets/NAND.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.NOR)"><img draggable="false" class="gate_img" src="assets/NOR.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.XNOR)"><img draggable="false" class="gate_img" src="assets/XNOR.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.NOT)"><img draggable="false" class="gate_img" src="assets/NOT.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.CONST)"><img draggable="false" class="gate_img" src="assets/CONST.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.INPUT)"><img draggable="false" class="gate_img" src="assets/IN.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.OUTPUT)"><img draggable="false" class="gate_img" src="assets/OUT.png"></button>
+                <button style="margin-bottom: 5px;" onclick="mainCircuit.addBuiltinChip(Viewport.getScreenCenterGlobalPos(), BuiltinChipCode.SEVEN_SEGMENT_DISPLAY)"><img draggable="false" class="gate_img" src="assets/DISPLAY.png"></button>
+            </div>
+        </div>
+
+        <div style="position: absolute; left: 150px; top: 20px;">
+            <div style="margin-bottom: 10px;">
+                <input type="file" id="custom_chip_upload" class="file_input" multiple />
+                <label for="custom_chip_upload" class="btn">Load custom module</label>
+            </div>
+
+            <button onclick="document.getElementById('custom_chip_dropdown').classList.toggle('show')" class="btn dropdown_button">Select custom module</button>
+            <div id="custom_chip_dropdown" class="dropdown-content">
+                <a href="" onclick="return false;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            </div>
+        </div>
+
+        <div style="position: absolute; right: 10px; top: 20px;">
+            <button onclick="ModuleTool.init()" class="btn" style="margin-bottom: 10px;">Save circuit as module</button>
+            <br>
+            <button onclick="mainCircuit.saveAsCircuit()" class="btn" style="margin-bottom: 10px;">Save circuit</button>
+        </div>
+    </div>
+
+    <div id="MODULE" style="display: none;">
+        <div style="position: absolute; left: 20px; top: 20px;">
+            <input id="module_name" value="" oninput="ModuleTool.changeChipName(this.value)" type="text" width="300" height="30" style="margin-bottom: 30px; width: 300px; height: 30px; font-size: 24px;" placeholder="Chip name" maxlength="25">
+            <br>
+            <input id="slider_module_x" style="margin-bottom: 50px;" type="range" min="2" max="68" step="2">
+            <br>
+            <input id="slider_module_y" style="margin-bottom: 50px;" type="range" min="2" max="32" step="2">
+        </div>
+
+        <div style="position: absolute; right: 10px; top: 20px;">
+            <button onclick="StateHandler.setActiveState('DEFAULT')" class="btn" style="margin-bottom: 10px;">Back to circuit</button>
+            <button onclick="ModuleTool.save()" class="btn" style="margin-bottom: 10px;">Save module</button>
+        </div>
+    </div>
+
+    <div id="SUBCIRCUIT" style="display: none;">
+        <div style="position: absolute; right: 10px; top: 20px;">
+            <button onclick="ModuleTool.init()" class="btn" style="margin-bottom: 10px;">Save circuit as module</button>
+            <br>
+            <button onclick="mainCircuit.saveAsCircuit()" class="btn" style="margin-bottom: 10px;">Save circuit</button>
+        </div>
+    </div>
+</body>
+
+</html>

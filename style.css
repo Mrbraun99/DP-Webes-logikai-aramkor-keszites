@@ -1,0 +1,78 @@
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 350px;
+    height: 7px;
+    background-color: #3498DB;
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 30px;
+    background-color: #2980B9;
+    border: 2px solid #04466D;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: -2px;
+}
+
+.btn {
+    min-width: 220px;
+    text-align: left;
+    background-color: #3498DB;
+    color: black;
+    padding: 4px;
+    font-size: 20px;
+    font-family: 'Arial';
+    cursor: pointer;
+    border: 2px solid #04466D;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #2980B9;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgb(230, 230, 230);
+    min-width: 200px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.gate_img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 70px;
+    height: auto;
+}
+
+.file_input {
+    display: none;
+}
