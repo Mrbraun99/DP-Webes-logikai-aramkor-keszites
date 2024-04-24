@@ -1,3 +1,21 @@
+/*
+    Logic Circuit Simulator
+    Copyright (C) 2024 Mórocz Barnabás
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 const MouseButton = Object.freeze({ LEFT: 0, MIDDLE: 1, RIGHT: 2 });
 const WireState = Object.freeze({ OFF: 0, ON: 1, FLOATING: 2, ERROR: 3 });
 const Direction = Object.freeze({ LEFT: 0, RIGHT: 1, UP: 2, DOWN: 3 });

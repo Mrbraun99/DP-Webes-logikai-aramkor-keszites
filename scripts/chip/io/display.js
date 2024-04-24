@@ -1,3 +1,21 @@
+/*
+    Logic Circuit Simulator
+    Copyright (C) 2024 Mórocz Barnabás
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 class SevenSegmentDisplay extends ChipCore {
     constructor(pos) {
         super(pos, BuiltinChipCode.SEVEN_SEGMENT_DISPLAY, { x: 6, y: 10 }, "", { "Show": { "offset": { "x": -2, "y": 5 } }, "8": { "offset": { "x": -1, "y": 5 } }, "4": { "offset": { "x": 0, "y": 5 } }, "2": { "offset": { "x": 1, "y": 5 } }, "1": { "offset": { "x": 2, "y": 5 } } }, {});
