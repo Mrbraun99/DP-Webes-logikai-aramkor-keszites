@@ -25,6 +25,7 @@ class Wire {
     optimizeStructure() {
         for (let i = this.points.length - 1; i >= 0; i--) {
             let wirePoint = this.points[i];
+            if (wirePoint instanceof InputPin || wirePoint instanceof OutputPin) continue;
 
             if (wirePoint.neighbours.length == 2) {
                 if ((wirePoint.getGlobalPosX() == wirePoint.neighbours[0].getGlobalPosX() && wirePoint.getGlobalPosX() == wirePoint.neighbours[1].getGlobalPosX()) || (wirePoint.getGlobalPosY() == wirePoint.neighbours[0].getGlobalPosY() && wirePoint.getGlobalPosY() == wirePoint.neighbours[1].getGlobalPosY())) {
