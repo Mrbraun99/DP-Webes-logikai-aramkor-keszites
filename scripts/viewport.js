@@ -96,6 +96,19 @@ const Viewport = {
         return { x: Math.round((((width / 2) - Viewport.offsetZoom.x) / Viewport.zoom - Viewport.offsetPan.x) / GRID_SIZE) * GRID_SIZE, y: Math.round((((height / 2) - Viewport.offsetZoom.y) / Viewport.zoom - Viewport.offsetPan.y) / GRID_SIZE) * GRID_SIZE };
     },
 
+    saveProperties: function () {
+        return { "zoom": Viewport.zoom, "offsetZoom": { x: Viewport.offsetZoom.x, y: Viewport.offsetZoom.y }, "offsetPan": { x: Viewport.offsetPan.x, y: Viewport.offsetPan.y }, "gridOffset": { x: Viewport.gridOffset.x, y: Viewport.gridOffset.y } };
+    },
+
+    loadProperties: function (properties) {
+        Viewport.zoom = properties.zoom;
+        Viewport.offsetZoom = properties.offsetZoom;
+        Viewport.offsetPan = properties.offsetPan;
+        Viewport.gridOffset = properties.gridOffset;
+
+        Viewport.generateGridImg();
+    },
+
     reset: function () {
         Viewport.zoom = 1;
         Viewport.panning = false;

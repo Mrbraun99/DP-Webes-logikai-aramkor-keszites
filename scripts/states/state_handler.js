@@ -212,8 +212,9 @@ const StateHandler = {
 
                 if (key == 'q') {
                     for (const chip of mainCircuit.chips.slice().reverse()) if (chip.code == "CUSTOM" && chip.isMouseOver()) {
-                        circuitHistory.push(mainCircuit);
+                        circuitHistory.push({ "circuit": mainCircuit, "properties": Viewport.saveProperties() });
                         mainCircuit = chip.evaluation.circuit;
+                        Viewport.reset();
                         StateHandler.setActiveState("SUBCIRCUIT");
                         break;
                     }
@@ -446,15 +447,19 @@ const StateHandler = {
             keyPressed: function (key, shiftKey, ctrlKey, altKey) {
                 if (key == 'q' && !shiftKey) {
                     for (const chip of mainCircuit.chips.slice().reverse()) if (chip.code == "CUSTOM" && chip.isMouseOver()) {
-                        circuitHistory.push(mainCircuit);
+                        circuitHistory.push({ "circuit": mainCircuit, "properties": Viewport.saveProperties() });
                         mainCircuit = chip.evaluation.circuit;
+                        Viewport.reset();
                         break;
                     }
                 }
 
                 if (key == 'q' && shiftKey) {
                     {
-                        mainCircuit = circuitHistory.pop();
+                        let data = circuitHistory.pop();
+                        mainCircuit = data.circuit;
+                        Viewport.loadProperties(data.properties);
+
                         if (circuitHistory.length == 0) StateHandler.setActiveState("DEFAULT");
                     }
                 }
