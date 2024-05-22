@@ -210,7 +210,7 @@ const StateHandler = {
                     mainCircuit = new Circuit();
                 }
 
-                if (key == 'q') {
+                if (key == 'q' && !shiftKey) {
                     for (const chip of mainCircuit.chips.slice().reverse()) if (chip.code == "CUSTOM" && chip.isMouseOver()) {
                         circuitHistory.push({ "circuit": mainCircuit, "properties": Viewport.saveProperties() });
                         mainCircuit = chip.evaluation.circuit;
